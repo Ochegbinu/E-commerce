@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
-use Illuminate\Contracts\Session\Session;
+use App\Models\Cart;
+use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
-class CategorysController extends Controller
+class CartsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,8 +16,9 @@ class CategorysController extends Controller
      */
     public function index()
     {
-        $categorys = Category::all();
-        return view('admin.all-categories', compact('categorys'));
+        $item_sum = Cart::where('user_id', Auth::user()->id)->sum('price');
+        $carts = Product::join('carts', 'product_id', '=', 'products.id')->get(['products.*', 'carts.product_id']);
+        return view('my-cart', compact('carts', 'item_sum'));
     }
 
     /**
@@ -26,7 +28,7 @@ class CategorysController extends Controller
      */
     public function create()
     {
-        return view('admin.create-category');
+        //
     }
 
     /**
@@ -37,14 +39,7 @@ class CategorysController extends Controller
      */
     public function store(Request $request)
     {
-        $category = Category::create([
-            'name' => $request->name, '',
-            'description' => $request->description,
-        ]);
-        return redirect()->route('createCategory')->with('message', 'Category Created Successfully');
-
-        
-       
+        //
     }
 
     /**
@@ -55,7 +50,15 @@ class CategorysController extends Controller
      */
     public function show($id)
     {
-        //
+        $product = Product::findOrFail($id);
+
+        $cart = Cart::create([
+            'user_id' => Auth::user()->id,
+            'product_id' => $product->id,
+            'price' => $product->price,
+        ]);
+       
+        return redirect()->route('all')->with('message', 'product add to cart successfully');
     }
 
     /**
@@ -89,10 +92,8 @@ class CategorysController extends Controller
      */
     public function destroy($id)
     {
-        $category = Category::findOrFail($id);
-        $category->delete();
-        return redirect()->back();
+        $cart = Cart::findOrFail($id);
+        $cart->delete();
+        return redirect()->back()->with('message', 'Remove from cart Successfully');
     }
-
-  
 }

@@ -2,7 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
-    
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -30,6 +30,15 @@
     <link href="css/style.css" rel="stylesheet" />
     <!-- responsive style -->
     <link href="css/responsive.css" rel="stylesheet" />
+    <!-- Toastr CSS -->
+    <link href="{{ asset('css/toastr.css') }}" rel="stylesheet">
+
+
+    <link rel="stylesheet" type="text/css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+
 </head>
 
 <body>
@@ -120,32 +129,32 @@
     </header>
     <!-- end header section -->
     <div id="app">
-<div class="row">
-    <div class="col-3">
-        <nav class="sidebar sidebar-offcanvas" id="sidebar">
-            <ul class="nav flex-column">
-                <li class="nav-item">
-                    <a class="nav-link" href="#">All Post</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" href="{{route('createCategory')}}">Create Category</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{route('allCategory')}}">All Category</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Create Post</a>
-                </li>
-            </ul>
-        </nav>
-    </div>
+        <div class="row">
+            <div class="col-3">
+                <nav class="sidebar sidebar-offcanvas" id="sidebar">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('allProduct') }}">All Products</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{{ route('createCategory') }}">Create Category</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('allCategory') }}">All Category</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('createProduct') }}">Create Product</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
 
-        <div class="col-9">
-            @yield('content')
+            <div class="col-9">
+                @yield('content')
+            </div>
+
+
         </div>
-
-
-    </div>
     </div>
 
 
@@ -162,7 +171,42 @@
     <script src="{{ asset('vendor/js/core/jquery.3.2.1.min.js') }}"></script>
     <script src="{{ asset('vendor/js/core/popper.min.js') }}"></script>
     <script src="{{ asset('vendor/js/core/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('vendor/js//toastr.min.js') }}"></script>
+    <script src="{{ asset('js/toastr.js') }}"></script>
+
+
+    <script>
+        @if (Session::has('message'))
+            toastr.options = {
+                "closeButton": true,
+                "progressBar": true
+            }
+            toastr.success("{{ session('message') }}");
+        @endif
+
+        @if (Session::has('error'))
+            toastr.options = {
+                "closeButton": true,
+                "progressBar": true
+            }
+            toastr.error("{{ session('error') }}");
+        @endif
+
+        @if (Session::has('info'))
+            toastr.options = {
+                "closeButton": true,
+                "progressBar": true
+            }
+            toastr.info("{{ session('info') }}");
+        @endif
+
+        @if (Session::has('warning'))
+            toastr.options = {
+                "closeButton": true,
+                "progressBar": true
+            }
+            toastr.warning("{{ session('warning') }}");
+        @endif
+    </script>
 
 </body>
 

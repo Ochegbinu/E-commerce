@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
-use Illuminate\Contracts\Session\Session;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
-class CategorysController extends Controller
+class ProductsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,8 +15,8 @@ class CategorysController extends Controller
      */
     public function index()
     {
-        $categorys = Category::all();
-        return view('admin.all-categories', compact('categorys'));
+        $products = Product::all();
+        return view('admin.all-products', compact('products'));
     }
 
     /**
@@ -26,7 +26,8 @@ class CategorysController extends Controller
      */
     public function create()
     {
-        return view('admin.create-category');
+        $categorys = Category::all();
+        return view('admin.create-product', compact('categorys'));
     }
 
     /**
@@ -37,14 +38,28 @@ class CategorysController extends Controller
      */
     public function store(Request $request)
     {
-        $category = Category::create([
-            'name' => $request->name, '',
-            'description' => $request->description,
-        ]);
-        return redirect()->route('createCategory')->with('message', 'Category Created Successfully');
+        // $request->validate([
+        //     'name' => ['required', 'string', 'max:255'],
+        //     'image' => ['required', 'image', 'mimes:jpeg,png,jpeg,gif,svg', 'max:2550'],
+        //     'price' => ['required', 'string', 'max:255'],
+        //     'description' => ['required', 'text', 'max:232'],
+        // ]);
 
-        
-       
+
+        $file = $request->file('image')->store('image', 'thumbnails');
+
+        $product = Product::create([
+            'name' => $request->name, 
+            'description' => $request->description,
+            'image' => $file,
+            'price' => $request->price,
+            'category' => $request->category,
+           
+        ]);
+
+
+
+        return redirect()->back()->with('message', 'Product created successfully');
     }
 
     /**
@@ -89,10 +104,8 @@ class CategorysController extends Controller
      */
     public function destroy($id)
     {
-        $category = Category::findOrFail($id);
-        $category->delete();
-        return redirect()->back();
-    }
+        $product = Product::findOrFail($id);
+        $product->delete();
 
-  
+    }
 }

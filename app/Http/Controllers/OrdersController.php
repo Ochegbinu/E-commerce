@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
+use App\Models\Cart;
+use App\Models\Order;
 use App\Models\Product;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
-class ProductsController extends Controller
+class OrdersController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,8 +18,7 @@ class ProductsController extends Controller
      */
     public function index()
     {
-        $products = Product::all();
-        return view('admin.all-products', compact('products'));
+        //
     }
 
     /**
@@ -26,8 +28,26 @@ class ProductsController extends Controller
      */
     public function create()
     {
-        $categorys = Category::all();
-        return view('admin.create-product', compact('categorys'));
+        $carts = Cart::where('user_id', Auth::user()->id)->get();
+        $item_sum = Cart::where('user_id', Auth::user()->id)->sum('price');
+
+        $transaction = Transaction::create([
+            'amount' =>  $item_sum,
+            'user_id' => Auth::user()->id,
+            'status' => 'paid',
+        ]);
+
+        foreach ($carts as $cart) {
+
+            Order::create([
+                'user_id' => Auth::user()->id,
+                'product_id' => $cart->product_id,
+                'total_amount' => $item_sum,
+                'transaction_id' => $transaction->id,
+            ]);
+        }
+        $carts->each->delete();
+        return redirect()->route('all')->with('message', 'Order Placed successfully');
     }
 
     /**
@@ -38,28 +58,7 @@ class ProductsController extends Controller
      */
     public function store(Request $request)
     {
-        // $request->validate([
-        //     'name' => ['required', 'string', 'max:255'],
-        //     'image' => ['required', 'image', 'mimes:jpeg,png,jpeg,gif,svg', 'max:2550'],
-        //     'price' => ['required', 'string', 'max:255'],
-        //     'description' => ['required', 'text', 'max:232'],
-        // ]);
-
-
-        $file = $request->file('image')->store('image', 'thumbnails');
-
-        $product = Product::create([
-            'name' => $request->name,
-            'description' => $request->description,
-            'image' => $file,
-            'price' => $request->price,
-            'category' => $request->category,
-
-        ]);
-
-
-
-        return redirect()->back()->with('message', 'Product created successfully');
+        //
     }
 
     /**
@@ -104,9 +103,6 @@ class ProductsController extends Controller
      */
     public function destroy($id)
     {
-        $product = Product::findOrFail($id);
-        $product->delete();
-
-        return redirect()->back()->with('message', 'Product deleted successfully');
+        //
     }
 }

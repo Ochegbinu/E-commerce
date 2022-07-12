@@ -92,7 +92,11 @@ class CategorysController extends Controller
         $category = Category::findOrFail($id);
         $category->delete();
         return redirect()->back();
+
+        return redirect()->route('createCategory')->with('message', 'Category Deleted Successfully');
+
     }
+    
 
   
 }

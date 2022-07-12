@@ -3,8 +3,10 @@
 use App\Http\Controllers\CartsController;
 use App\Http\Controllers\CategorysController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductsController;
+use App\Http\Controllers\StripeController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -27,7 +29,7 @@ Auth::routes();
 
 Route::get('/', [HomeController::class, 'create'])->name('all');
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 
 Route::get('/all-categories', [CategorysController::class, 'index'])->name('allCategory');
@@ -47,16 +49,5 @@ Route::get('/my-cart', [CartsController::class, 'index'])->name('myCart');
 Route::get('/remove-cart/{id}', [CartsController::class, 'destroy'])->name('removeCart');
 
 
-// Laravel 8 & 9
-Route::post('/pay', [PaymentController::class, 'redirectToGateway'])->name('pay');
 
-
-
-
-
-
-
-
-
-
-
+Route::get('/orders', [OrdersController::class, 'create'])->name('order');

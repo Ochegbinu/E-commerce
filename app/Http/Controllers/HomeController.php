@@ -5,18 +5,20 @@ namespace App\Http\Controllers;
 use App\Models\Cart;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
     /**
      * Create a new controller instance.
      *
-     * @return void
+     *
+     *  @return void
      */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
+    // public function __construct()
+    // {
+    //     $this->middleware('auth');
+    // }
 
     /**
      * Show the application dashboard.
@@ -32,7 +34,8 @@ class HomeController extends Controller
     public function create()
     {
         $products = Product::all();
-        $counters = Cart::all('product_id')->count();
+        $counters = Cart::where('product_id')->count();
+       
         return view('/welcome', compact('products', 'counters'));
     }
 }

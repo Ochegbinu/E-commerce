@@ -85,7 +85,7 @@
                         @if (Route::has('login'))
                             @auth
                                 <a class="nav-link" href=""
-                                    class="text-sm text-gray-700 dark:text-gray-500 underline">{{Auth::user()->name}}</a>
+                                    class="text-sm text-gray-700 dark:text-gray-500 underline">{{ Auth::user()->name }}</a>
                             @else
                                 <li class="nav-item"><a class="nav-link" href="{{ route('login') }}"
                                         class="ml-4 text-sm text-gray-700 dark:text-gray-500 underline">Login</a></li>
@@ -99,7 +99,7 @@
                         @endif
 
                         <li class="nav-item">
-                            <a class="nav-link" href="{{route('myCart')}}">{{$counters}}
+                            <a class="nav-link" href="{{ route('myCart') }}">{{ $counters }}
                                 <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
                                     xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                                     viewBox="0 0 456.029 456.029" style="enable-background:new 0 0 456.029 456.029;"
@@ -587,37 +587,36 @@
                 </h2>
             </div>
             <div class="row">
-  
- @foreach ($products as $product)
-    
- 
-                <div class="col-sm-6 col-md-4 col-lg-4">
-                    <div class="box">
-                        <div class="option_container">
-                            <div class="options">
-                                <a href="{{route('cart',[$product->id])}}" class="option1">
-                                    Add To Cart
-                                </a>
-                                <a href="" class="option2">
-                                    Buy Now
-                                </a>
+
+                @foreach ($products as $product)
+                    <div class="col-sm-6 col-md-4 col-lg-4">
+                        <div class="box">
+                            <div class="option_container">
+                                <div class="options">
+                                    <a href="{{ route('cart', [$product->id]) }}" class="option1">
+                                        Add To Cart
+                                    </a>
+                                    <a href="" class="option2">
+                                        Buy Now
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="img-box">
+                                <img src="{{ asset($product->image) }}" style="width: 100px" />
+                            </div>
+                            <div class="detail-box">
+                                <h5>
+                                    {{ $product->name }}
+                                </h5>
+                                <h6>
+                                    <span>&#8358</span> {{ $product->price }}
+                                </h6>
                             </div>
                         </div>
-                        <div class="img-box">
-                            <img src="{{ asset($product->image) }}" style="width: 100px" />
-                        </div>
-                        <div class="detail-box">
-                            <h5>
-                                {{$product->name}}
-                            </h5>
-                            <h6>
-                            <span>&#8358</span> {{$product->price}}
-                            </h6>
-                        </div>
                     </div>
-                </div>
                 @endforeach
             </div>
+
             <div class="btn-box">
                 <a href="">
                     View All products

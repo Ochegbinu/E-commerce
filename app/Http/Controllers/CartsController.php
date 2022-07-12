@@ -57,7 +57,7 @@ class CartsController extends Controller
             'product_id' => $product->id,
             'price' => $product->price,
         ]);
-       
+
         return redirect()->route('all')->with('message', 'product add to cart successfully');
     }
 
